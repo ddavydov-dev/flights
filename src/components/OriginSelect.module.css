@@ -1,0 +1,21 @@
+.Input {
+  & input {
+    border-radius: 0;
+    /* border-left: none; */
+    height: 60px;
+    font-size: 16px;
+  }
+
+  & button {
+    border-radius: 0;
+    /* border-left: none; */
+    height: 60px;
+  }
+  & > div:nth-child(1) input {
+    border-radius: 16px 0 0 16px;
+    /* border-left: 1px solid rgb(206, 212, 218); */
+  }
+  & > div:nth-child(8) input {
+    border-radius: 0 16px 16px 0;
+  }
+}
