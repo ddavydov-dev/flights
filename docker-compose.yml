@@ -1,0 +1,41 @@
+services:
+  backend:
+    build: ./code/backend
+    container_name: backend
+    restart: unless-stopped
+    networks: [app-net]
+    environment:
+      - PORT=4000
+    expose:
+      - '4000'
+
+  frontend:
+    build: ./code/frontend
+    container_name: frontend
+    restart: unless-stopped
+    networks: [app-net]
+    environment:
+      - PORT=3000
+    expose:
+      - '3000'
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - certs:/etc/letsencrypt
+      - certs-data:/var/lib/letsencrypt
+    networks: [app-net]
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  certs:
+  certs-data:
