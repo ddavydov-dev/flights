@@ -1,7 +1,7 @@
 'use client'
 
 import { Group, Select, SelectProps, Text } from '@mantine/core'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useAirportSelect } from '@/hooks/useAirportSelect'
 
 interface AirportSelectProps {
@@ -35,7 +35,9 @@ export default function AirportSelect({
     onBlur
   } = useAirportSelect({ initialIata, withNearby, onChange })
 
-  const handleFocus = () => setTimeout(() => inputRef.current?.select(), 0)
+  const handleFocus = useCallback(() => {
+    setTimeout(() => inputRef.current?.select(), 0)
+  }, [inputRef])
 
   const renderOption: SelectProps['renderOption'] = ({ option }) => {
     const item = airports.find(a => a.label === option.label)!
