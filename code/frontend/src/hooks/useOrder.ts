@@ -1,11 +1,5 @@
-import { AmadeusFlightOffer } from '@/app/types'
+import { AmadeusFlightOffer, Order } from '@/app/types'
 import { useQuery } from '@tanstack/react-query'
-
-export interface Order {
-  id: string
-  offer: AmadeusFlightOffer
-  seats: string[]
-}
 
 export const useOrder = (id: string) =>
   useQuery<Order, Error>({

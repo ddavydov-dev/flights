@@ -1,33 +1,21 @@
-import { AmadeusHotelOffer, Hotel } from '@/app/types'
+import { HotelOfferDTO } from '@/app/types'
 
-export async function fetchHotelOffers(
-  city: string,
-  checkIn: string | null,
-  checkOut: string | null,
+export interface FetchHotelOffersParams {
+  city: string
+  checkInDate: string | null
+  checkOutDate: string | null
   adults: string
-): Promise<Hotel[]> {
-  const qs = new URLSearchParams({
-    city,
-    ...(checkIn ? { checkInDate: checkIn } : {}),
-    ...(checkOut ? { checkOutDate: checkOut } : {}),
-    adults
-  })
+}
 
-  const res = await fetch(`/api/search/hotels?${qs}`)
+export async function fetchHotelOffers(params: FetchHotelOffersParams): Promise<HotelOfferDTO[]> {
+  const res = await fetch(`/api/search/hotels`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-  const { data } = (await res.json()) as { data: AmadeusHotelOffer[] }
+  const { data = [] } = (await res.json()) as { data: HotelOfferDTO[] }
 
-  return data.map(h => {
-    const offer = h.offers[0]
-    return {
-      id: h.hotel.hotelId,
-      name: h.hotel.name,
-      price: offer.price.total,
-      currency: offer.price.currency,
-      room: offer.room?.typeEstimated?.category ?? '',
-      board: offer.boardType ?? '',
-      offerId: offer.id
-    }
-  })
+  return data
 }

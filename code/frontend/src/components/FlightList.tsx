@@ -1,8 +1,9 @@
 'use client'
 
-import { Stack, Skeleton, Alert, Button } from '@mantine/core'
+import { Stack, Skeleton, Alert, Button, Group, SegmentedControl, Select } from '@mantine/core'
 import FlightCard from '@/components/FlightCard'
 import { useFlightOffers } from '@/hooks/useFlightOffers'
+import FlightSort from './FlightSort'
 
 export default function FlightList() {
   const { data: offers, isLoading, isError, error, refetch } = useFlightOffers()

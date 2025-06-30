@@ -4,6 +4,7 @@ import { Card, Group, Text, Button, Stack } from '@mantine/core'
 import { FlightOfferDTO } from '@/api/fetchFlightOffers'
 import { useCreateOrder } from '@/hooks/useCreateOrder'
 import { useRouter } from 'next/navigation'
+import { useFlightsSearchParams } from '@/hooks/useFlightsSearchParams'
 
 function fmtDuration(iso: string): string {
   const m = /^PT(?:(\d+)H)?(?:(\d+)M)?/.exec(iso)
@@ -26,6 +27,7 @@ export default function FlightCard({
   bags,
   raw
 }: FlightOfferDTO) {
+  const { passengers } = useFlightsSearchParams()
   const { mutateAsync: createOrder, isPending } = useCreateOrder()
   const router = useRouter()
 
@@ -33,7 +35,6 @@ export default function FlightCard({
     <>
       <Card shadow="sm" withBorder>
         <Group align="center" wrap="nowrap">
-          {/* ---------- Route + times ---------- */}
           <Stack mr="auto">
             <Text fw={700} size="lg">
               {origin} → {destination}
@@ -62,8 +63,7 @@ export default function FlightCard({
               variant="outline"
               loading={isPending}
               onClick={async () => {
-                console.log('👨‍🦯 raw:', raw)
-                const { id } = await createOrder(raw) // raw = AmadeusFlightOffer
+                const { id } = await createOrder({ flightOffer: raw, passengers })
                 router.push(`/orders/${id}`)
               }}
             >

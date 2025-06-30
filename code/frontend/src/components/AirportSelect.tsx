@@ -1,116 +1,89 @@
 'use client'
 
-import { Autocomplete, Loader } from '@mantine/core'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useAirports } from '@/hooks/useAirports'
-import { toTitleCasePreserveCode } from '@/app/utils'
-import { Airport } from '@/hooks/useOrigin'
+import { Group, Select, SelectProps, Text } from '@mantine/core'
+import { useRef } from 'react'
+import { useAirportSelect } from '@/hooks/useAirportSelect'
 
-interface Props {
-  placeholder: string
+interface AirportSelectProps {
   initialIata: string
   onChange: (iata: string) => void
+  withNearby?: boolean
   initialError?: string
-  initialOptions?: Airport[]
-  initialLoading?: boolean
+  placeholder: string
+  ariaLabel: string
 }
 
 export default function AirportSelect({
-  placeholder,
   initialIata,
   onChange,
+  withNearby = false,
   initialError,
-  initialOptions = [],
-  initialLoading = false
-}: Props) {
-  const [query, setQuery] = useState(initialIata)
-  // const [selected, setSelected] = useState<Airport | null>(null)
-  // const [validationError, setValidationError] = useState(initialError)
+  placeholder,
+  ariaLabel
+}: AirportSelectProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleFocus = () => {
-    setTimeout(() => {
-      inputRef.current?.select()
-    }, 0)
+  const {
+    selectedIata,
+    searchValue,
+    loading,
+    error,
+    dropdownOptions,
+    airports,
+    // dropdownOpen,
+    onSearchChange,
+    onOptionSubmit,
+    onBlur
+  } = useAirportSelect({ initialIata, withNearby, onChange })
+
+  const handleFocus = () => setTimeout(() => inputRef.current?.select(), 0)
+
+  const renderOption: SelectProps['renderOption'] = ({ option }) => {
+    const item = airports.find(a => a.label === option.label)!
+    return (
+      <div>
+        <Group gap={6}>
+          <Text>{item.city}</Text>
+          <Text c="gray">{item.iataCode}</Text>
+        </Group>
+        <Text c="gray" size="sm">
+          {item.country}
+        </Text>
+      </div>
+    )
   }
 
-  const { data: fetchedOptions = [], isLoading: fetchedLoading, error } = useAirports(query, true)
-
-  useEffect(() => {
-    if (initialOptions.length) {
-      // setSelected(initialOptions[0])
-      setQuery(toTitleCasePreserveCode(initialOptions[0].label))
-      onChange(initialOptions[0].iata)
-    }
-  }, [initialOptions, onChange])
-
-  const options = useMemo(() => {
-    if (query.trim() === '')
-      return [
-        ...initialOptions,
-        ...fetchedOptions.filter(o => !initialOptions.some(i => i.iata === o.iata))
-      ]
-    return fetchedOptions
-  }, [query, initialOptions, fetchedOptions])
-
-  const labels = useMemo(() => options.map(o => o.label), [options])
-
-  const hydratedOnce = useRef(false)
-  useEffect(() => {
-    if (!hydratedOnce.current && options.length && initialIata && query === initialIata) {
-      const match = options.find(o => o.iata === initialIata)
-      if (match) {
-        // setSelected(match)
-        setQuery(toTitleCasePreserveCode(match.label))
-      }
-      hydratedOnce.current = true
-    }
-  }, [options, initialIata, query])
-  // const hydratedOnce = useRef(false)
-  // useEffect(() => {
-  //   const match = options.find(o => o.iata === initialIata)
-  //   if (!hydratedOnce.current && match) {
-  //     setSelected(match)
-  //     setQuery(toTitleCasePreserveCode(match.label))
-  //     hydratedOnce.current = true
-  //   }
-  // }, [options, initialIata])
-
-  // const handleValidate = useCallback(() => {
-  //   if (!selected && !options.find(o => toTitleCasePreserveCode(o.label) === query)) {
-  //     onChange('')
-  //     setValidationError('Invalid')
-  //   }
-  // }, [query, options, selected, onChange])
-
-  const loading = initialLoading || fetchedLoading
-
   return (
-    <Autocomplete
+    <Select
+      searchable
+      value={selectedIata}
+      // dropdownOpened={dropdownOpen}
+      searchValue={searchValue}
       placeholder={placeholder}
-      value={query}
-      onFocus={handleFocus}
+      aria-label={ariaLabel}
       ref={inputRef}
-      // className={styles.Input}
-      onChange={v => {
-        const opt = options.find(option => option.label === v)
-        if (opt) {
-          // setSelected(opt)
-          setQuery(toTitleCasePreserveCode(opt.label))
-          onChange(opt.iata)
-        } else {
-          // setSelected(null)
-          setQuery(v)
-          onChange('')
-        }
-      }}
-      // onBlur={handleValidate}
-      data={labels}
+      size="md"
+      allowDeselect={false}
+      onFocus={handleFocus}
+      onSearchChange={onSearchChange}
+      onOptionSubmit={onOptionSubmit}
+      onBlur={onBlur}
+      data={dropdownOptions}
+      nothingFoundMessage={
+        searchValue && loading
+          ? 'Loading...'
+          : !loading && searchValue
+          ? 'Nothing found'
+          : undefined
+      }
       error={initialError || error?.message || undefined}
-      rightSection={loading && <Loader size={14} />}
       miw={200}
-      clearable
-      size="lg"
+      withCheckIcon={false}
+      comboboxProps={{ width: 300, position: 'bottom-start', radius: 'sm' }}
+      renderOption={renderOption}
+      rightSectionWidth={12}
+      rightSection={<></>}
+      filter={() => dropdownOptions}
     />
   )
 }

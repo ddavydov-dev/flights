@@ -4,7 +4,7 @@ import { Group, SegmentedControl } from '@mantine/core'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
-const ORIGIN_KEY = 'lastOrigin' // sessionStorage
+const ORIGIN_KEY = 'lastOrigin'
 
 function flightToHotel(sp: URLSearchParams): URLSearchParams {
   const next = new URLSearchParams()
@@ -50,13 +50,23 @@ export default function Tabs() {
     (view: string) => {
       let nextParams: URLSearchParams
 
-      if (view === 'flights') {
-        nextParams = hotelToFlight(params)
-      } else if (view === 'hotels') {
-        nextParams = flightToHotel(params)
-      } else {
-        nextParams = params
+      switch (view) {
+        case 'flights':
+          nextParams = hotelToFlight(params)
+          break
+        case 'hotels':
+          nextParams = flightToHotel(params)
+          break
+        default:
+          nextParams = params
       }
+      // if (view === 'flights') {
+      //   nextParams = hotelToFlight(params)
+      // } else if (view === 'hotels') {
+      //   nextParams = flightToHotel(params)
+      // } else {
+      //   nextParams = params
+      // }
 
       router.push(`/${view}?${nextParams.toString()}`)
     },
@@ -64,7 +74,7 @@ export default function Tabs() {
   )
 
   return (
-    <Group justify="center" mb={20}>
+    <Group justify="left" mb={20}>
       <SegmentedControl
         data={[
           { label: 'Flights', value: 'flights' },

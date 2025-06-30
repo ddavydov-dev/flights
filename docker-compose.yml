@@ -4,10 +4,10 @@ services:
     container_name: backend
     restart: unless-stopped
     networks: [app-net]
+    env_file:
+      - ./code/backend/.env
     environment:
-      - PORT=4000
-      - AMADEUS_API_KEY=z2e4WZRwwip2WekklcWBaahkQLjDd0xD
-      - AMADEUS_API_SECRET=fuXxSTPNh5o1jxvY
+      - NODE_ENV=production
     expose:
       - '4000'
 
@@ -16,9 +16,8 @@ services:
     container_name: frontend
     restart: unless-stopped
     networks: [app-net]
-    environment:
-      - PORT=3000
-      - NEXT_PUBLIC_BACKEND_URL=http://backend:4000
+    env_file:
+      - ./code/frontend/.env
     expose:
       - '3000'
 

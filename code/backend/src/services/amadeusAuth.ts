@@ -1,3 +1,5 @@
+import { fail } from '../utils/http'
+
 const TOKEN_URL = 'https://test.api.amadeus.com/v1/security/oauth2/token'
 const clientId = process.env.AMADEUS_API_KEY ?? ''
 const clientSecret = process.env.AMADEUS_API_SECRET ?? ''
@@ -32,10 +34,10 @@ export async function getAccessToken(): Promise<string> {
   return accessToken
 }
 
-export async function amadeusGet(
+export async function amadeusGet<T>(
   path: string,
   params: Record<string, string | number>
-): Promise<any> {
+): Promise<T> {
   const token = await getAccessToken()
   const qs = new URLSearchParams(params as Record<string, string>).toString()
   const url = `https://test.api.amadeus.com${path}?${qs}`
@@ -44,14 +46,10 @@ export async function amadeusGet(
     headers: { Authorization: `Bearer ${token}` }
   })
 
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Amadeus GET ${path} failed (${res.status}): ${text}`)
-  }
   return res.json()
 }
 
-export async function amadeusPost(path: string, payload: unknown): Promise<any> {
+export async function amadeusPost<T>(path: string, payload: unknown): Promise<T> {
   const token = await getAccessToken()
   const url = `https://test.api.amadeus.com${path}`
 
@@ -64,9 +62,5 @@ export async function amadeusPost(path: string, payload: unknown): Promise<any> 
     body: JSON.stringify(payload)
   })
 
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Amadeus POST ${path} failed (${res.status}): ${text}`)
-  }
   return res.json()
 }

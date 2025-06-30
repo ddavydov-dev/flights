@@ -7,15 +7,20 @@ export function useFlightOffers() {
   return useQuery({
     queryKey: [
       'flightOffers',
-      params.origin,
-      params.destination,
+      params.originLocationCode,
+      params.destinationLocationCode,
       params.departureDate,
       params.returnDate,
-      params.passengers
+      params.passengers,
+      params.sortBy,
+      params.sortOrder
     ],
     queryFn: () => fetchFlightOffers(params),
     enabled:
-      !!params.origin && !!params.destination && !!params.departureDate && !!params.passengers,
+      !!params.originLocationCode &&
+      !!params.destinationLocationCode &&
+      !!params.departureDate &&
+      !!params.passengers,
     staleTime: 0
   })
 }

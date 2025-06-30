@@ -1,13 +1,6 @@
+import { LocationDTO } from '@/app/types'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-
-export interface Airport {
-  name: string
-  iata: string
-  label: string
-  city: string
-  country: string
-}
 
 function getCoords(): Promise<{ lat: number; lng: number } | null> {
   return new Promise(resolve => {
@@ -31,7 +24,7 @@ export function useOrigin(enabled = true) {
     }
   }, [enabled])
 
-  return useQuery<Airport[]>({
+  return useQuery<LocationDTO[]>({
     queryKey: coords
       ? ['nearest-airports', coords.lat, coords.lng]
       : ['nearest-airports', 'no-coords'],
@@ -39,10 +32,10 @@ export function useOrigin(enabled = true) {
       if (!coords) return []
       const res = await fetch(`/api/airports/nearby?lat=${coords.lat}&lng=${coords.lng}`)
       if (!res.ok) throw new Error(await res.text())
-      return res.json()
+      const { data } = await res.json()
+      return data as LocationDTO[]
     },
-    enabled: false,
-    // enabled: !!coords && enabled,
+    enabled: !!coords && enabled,
     staleTime: 1000 * 60 * 60,
     retry: 1,
     placeholderData: keepPreviousData

@@ -1,11 +1,7 @@
-import SeatMapSection from '@/components/SeatMapSection'
-import { Container } from '@mantine/core'
+import Order from '@/components/Order'
 
 export default async function OrderPage(ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params
-  return (
-    <Container size="lg" py="lg">
-      <SeatMapSection orderId={id} />
-    </Container>
-  )
+
+  return <Order id={id} />
 }

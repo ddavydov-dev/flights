@@ -55,9 +55,5 @@ export function useHotelsSearchForm() {
     [updateParam]
   )
 
-  //   const setCheckIn = useDebouncedCallback((v: string | null) => updateParam('checkIn', v), 400)
-  //   const setCheckOut = useDebouncedCallback((v: string | null) => updateParam('checkOut', v), 400)
-  //   const setAdults = useDebouncedCallback((v: number) => updateParam('adults', v.toString()), 400)
-
   return { city, checkIn, checkOut, adults, setCity, setCheckIn, setCheckOut, setAdults }
 }

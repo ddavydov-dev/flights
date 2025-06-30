@@ -5,10 +5,11 @@ import FlightsSearchForm from '@/components/FlightsSearchForm'
 import Tabs from '@/components/Tabs'
 import FlightList from '@/components/FlightList'
 import { Suspense } from 'react'
+import FlightSort from '@/components/FlightSort'
 
 export default function FlightsPage() {
   return (
-    <Container size="lg" py="lg">
+    <Container size="xl" py="lg">
       <Suspense>
         <Tabs />
 
@@ -16,6 +17,7 @@ export default function FlightsPage() {
 
         <Divider my={40} />
 
+        <FlightSort />
         <FlightList />
       </Suspense>
     </Container>

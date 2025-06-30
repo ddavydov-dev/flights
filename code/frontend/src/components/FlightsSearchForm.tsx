@@ -6,9 +6,6 @@ import { useRouter } from 'next/navigation'
 import AirportSelect from './AirportSelect'
 import { useFlightsSearchForm } from '@/hooks/useFlightsSearchForm'
 import { useState } from 'react'
-import OriginSelect from './OriginSelect'
-
-import styles from './OriginSelect.module.css'
 
 export default function FlightsSearchForm() {
   const {
@@ -24,15 +21,8 @@ export default function FlightsSearchForm() {
     setPassengers
   } = useFlightsSearchForm()
 
-  // const { data: nearbyAirports = [], isLoading: originLoading } = useOrigin(true)
-
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
-
-  // const swapAirports = () => {
-  //   setOrigin(destination)
-  //   setDestination(origin)
-  // }
 
   const handleSubmit = () => {
     setSubmitted(true)
@@ -50,15 +40,18 @@ export default function FlightsSearchForm() {
   }
 
   return (
-    <Group grow wrap="wrap" justify="center" align="flex-start" gap={0} className={styles.Input}>
-      <OriginSelect
+    <Group grow wrap="wrap" justify="center" align="flex-start">
+      <AirportSelect
+        placeholder="From"
+        ariaLabel="From"
         initialIata={origin}
         onChange={setOrigin}
         initialError={submitted && !origin ? 'Required' : ''}
+        withNearby
       />
-
       <AirportSelect
         placeholder="Where"
+        ariaLabel="Where"
         initialIata={destination}
         onChange={setDestination}
         initialError={submitted && !destination ? 'Required' : ''}
@@ -69,7 +62,7 @@ export default function FlightsSearchForm() {
         onChange={setDepartureDate}
         error={submitted && !departureDate && 'Required'}
         miw={200}
-        size="lg"
+        size="md"
         minDate={new Date()}
         maxDate={returnDate ?? undefined}
         placeholder="Departure"
@@ -80,25 +73,23 @@ export default function FlightsSearchForm() {
         onChange={setReturnDate}
         minDate={departureDate ?? undefined}
         miw={200}
-        size="lg"
+        size="md"
         placeholder="Return"
         clearable
       />
       <NumberInput
-        // label="Passengers"
         value={passengers}
         onChange={val => setPassengers(+val)}
         min={1}
         error={submitted && !passengers && 'Required'}
-        miw={160}
-        // className={styles.Input}
-        size="lg"
+        miw={200}
+        size="md"
       />
       <Button
-        size="lg"
+        size="md"
         onClick={handleSubmit}
         miw={160}
-        style={{ alignSelf: 'flex-start', borderRadius: 16 }}
+        style={{ alignSelf: 'flex-start' }}
         ml={10}
       >
         Search

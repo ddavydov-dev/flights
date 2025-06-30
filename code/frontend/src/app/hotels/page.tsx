@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 
 export default function HotelsPage() {
   return (
-    <Container size="lg" py="lg">
+    <Container size="xl" py="lg">
       <Suspense>
         <Tabs />
 

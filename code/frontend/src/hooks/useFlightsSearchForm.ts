@@ -8,8 +8,8 @@ export function useFlightsSearchForm() {
   const router = useRouter()
 
   const values = useFlightsSearchParams()
-  const [origin, setOriginDraft] = useState(values.origin)
-  const [destination, setDestinationDraft] = useState(values.destination)
+  const [origin, setOriginDraft] = useState(values.originLocationCode)
+  const [destination, setDestinationDraft] = useState(values.destinationLocationCode)
   const [departureDate, setDepartureDateDraft] = useState(values.departureDate)
   const [returnDate, setReturnDateDraft] = useState(values.returnDate)
   const [passengers, setPassengersDraft] = useState(values.passengers)
@@ -77,5 +77,9 @@ export function useFlightsSearchForm() {
     setDepartureDate,
     setReturnDate,
     setPassengers
+    // sortBy: values.sortBy,
+    // setSortBy,
+    // sortOrder: values.sortOrder,
+    // setSortOrder
   }
 }
