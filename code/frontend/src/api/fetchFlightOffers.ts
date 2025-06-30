@@ -13,18 +13,14 @@ export interface FlightOfferDTO {
   price: string
   currency: string
   carrier: string
-
   origin: string
   destination: string
   departureTime: string
   arrivalTime: string
-
-  duration: string // ISO-8601 “PT18H40M”
+  duration: string
   stops: number
-
   cabin: string
   bags: number | null
-
   raw: AmadeusFlightOffer
 }
 
@@ -38,7 +34,7 @@ export async function fetchFlightOffers(
   })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-  const { data = [] } = (await res.json()) as { data: FlightOfferDTO[]; error?: {} }
+  const { data = [] } = (await res.json()) as { data: FlightOfferDTO[] }
 
   return data
 }

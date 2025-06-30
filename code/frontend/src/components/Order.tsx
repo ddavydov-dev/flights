@@ -76,7 +76,7 @@ export default function Order({ id }: { id: string }) {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {passengers.map((p: any, idx: number) => (
+              {passengers.map((p, idx: number) => (
                 <Table.Tr key={p.id}>
                   <Table.Td>{idx + 1}</Table.Td>
                   <Table.Td>

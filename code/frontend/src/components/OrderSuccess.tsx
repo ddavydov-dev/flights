@@ -24,7 +24,7 @@ export default function OrderSuccess({ orderId }: { orderId: string }) {
 
         <Card withBorder radius="md">
           <Text fw={700}>Itinerary</Text>
-          {order.flightOffers[0].itineraries[0].segments.map((s: any) => (
+          {order.flightOffers[0].itineraries[0].segments.map(s => (
             <Text key={s.id}>
               {s.departure.iataCode}&nbsp;→&nbsp;
               {s.arrival.iataCode}&nbsp; ({new Date(s.departure.at).toLocaleString()} →{' '}
@@ -36,7 +36,7 @@ export default function OrderSuccess({ orderId }: { orderId: string }) {
         <Card withBorder radius="md">
           <Text fw={700}>Total paid</Text>
           <Text size="lg">
-            {order.flightOffers[0].price.grandTotal}&nbsp;
+            {order.flightOffers[0].price.total}&nbsp;
             {order.flightOffers[0].price.currency}
           </Text>
         </Card>

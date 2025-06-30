@@ -29,12 +29,7 @@ export default function HotelList() {
 
   if (data.length === 0) {
     return (
-      <Alert
-        mt="md"
-        // icon={<IconInfoCircle size={16} />}
-        title="No hotels found"
-        color="blue"
-      >
+      <Alert mt="md" title="No hotels found" color="blue">
         We couldn’t find any offers for the chosen dates and destination. Try adjusting your search
         or check back later.
       </Alert>
@@ -43,8 +38,8 @@ export default function HotelList() {
 
   return (
     <Stack mt="md">
-      {data.map(h => (
-        <HotelCard key={h.offerId} hotel={h} />
+      {data.map(hotel => (
+        <HotelCard key={hotel.id} hotel={hotel} />
       ))}
     </Stack>
   )

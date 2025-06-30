@@ -1,4 +1,4 @@
-import { AmadeusFlightOffer, Order } from '@/app/types'
+import { Order } from '@/app/types'
 import { useQuery } from '@tanstack/react-query'
 
 export const useOrder = (id: string) =>

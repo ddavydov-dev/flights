@@ -8,7 +8,9 @@ export interface RawSeat {
 }
 
 interface SeatMapResponse {
-  data: { decks: { seats: RawSeat[] }[] }[]
+  data: {
+    data: { decks: { seats: RawSeat[] }[] }[]
+  }
 }
 
 export interface SeatDTO {
@@ -23,7 +25,7 @@ export async function fetchSeatMapByOrder(id: string): Promise<SeatDTO[]> {
   const r = await fetch(`/api/orders/${id}/seatmap`)
   if (!r.ok) throw new Error(await r.text())
 
-  const { data } = (await r.json()) as any
+  const { data } = (await r.json()) as SeatMapResponse
   const raw: RawSeat[] = data.data?.[0]?.decks?.[0]?.seats ?? []
 
   return raw.map(s => ({

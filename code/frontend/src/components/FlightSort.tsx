@@ -1,4 +1,3 @@
-import { useFlightsSearchForm } from '@/hooks/useFlightsSearchForm'
 import { useFlightsSearchParams } from '@/hooks/useFlightsSearchParams'
 import { Group, SegmentedControl, Select } from '@mantine/core'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -27,7 +26,7 @@ export default function FlightSort() {
   useEffect(() => {
     if (!sortBy) updateParam('sort', 'price')
     if (!sortOrder) updateParam('order', 'asc')
-  }, [])
+  }, [sortBy, sortOrder, updateParam])
 
   return (
     <Group align="end" justify="flex-start">

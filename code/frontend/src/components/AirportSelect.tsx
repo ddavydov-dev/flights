@@ -30,7 +30,6 @@ export default function AirportSelect({
     error,
     dropdownOptions,
     airports,
-    // dropdownOpen,
     onSearchChange,
     onOptionSubmit,
     onBlur
@@ -57,7 +56,6 @@ export default function AirportSelect({
     <Select
       searchable
       value={selectedIata}
-      // dropdownOpened={dropdownOpen}
       searchValue={searchValue}
       placeholder={placeholder}
       aria-label={ariaLabel}

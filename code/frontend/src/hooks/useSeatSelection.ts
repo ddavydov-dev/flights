@@ -17,7 +17,7 @@ export function useSeatSelection(orderId: string) {
 
   const { data: seatMap = [], isLoading: seatMapLoading } = useSeatMapByOrder(orderId)
 
-  const passengers = order?.passengers ?? []
+  const passengers = useMemo(() => order?.passengers ?? [], [order?.passengers])
 
   const [activePassenger, setActivePassenger] = useState<string>('')
   useEffect(() => {
@@ -43,7 +43,8 @@ export function useSeatSelection(orderId: string) {
         }
 
         if (current === seat.id) {
-          const { [activePassenger]: _, ...others } = prev
+          const others = { ...prev }
+          delete others[activePassenger]
           return others
         }
 

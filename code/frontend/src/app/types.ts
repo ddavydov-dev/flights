@@ -24,6 +24,7 @@ export interface AmadeusFlightOffer {
   validatingAirlineCodes: string[]
   itineraries: {
     segments: {
+      id: string
       departure: { at: string; iataCode: string }
       arrival: { at: string; iataCode: string }
     }[]
@@ -83,4 +84,16 @@ export interface Order {
   offer: FlightOfferDTO
   passengers: Passenger[]
   seats: SeatDTO[]
+}
+
+export interface AmadeusFlightOrder {
+  type: 'flight-order'
+  id: string
+  queuingOfficeId: string
+  flightOffers: AmadeusFlightOffer[]
+  associatedRecords: {
+    reference: string
+    originSystemCode: string
+    flightOfferId: string
+  }[]
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { AmadeusFlightOrder } from '@/app/types'
 import { useQuery } from '@tanstack/react-query'
 
 export function useConfirmation(orderId: string) {
@@ -8,7 +9,7 @@ export function useConfirmation(orderId: string) {
     queryFn: async () => {
       const res = await fetch(`/api/orders/${orderId}/confirmation`)
       if (!res.ok) throw new Error('No confirmation found')
-      return res.json()
+      return (await res.json()) as { data: AmadeusFlightOrder }
     }
   })
 }
