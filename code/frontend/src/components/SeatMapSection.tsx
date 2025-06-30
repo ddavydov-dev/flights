@@ -1,28 +1,30 @@
 'use client'
 
+import { useSeatSelection } from '@/features/orders/hooks'
 import { Button, Divider, Group, Radio, Skeleton, Stack, Text } from '@mantine/core'
-import { useSeatSelection } from '@/hooks/useSeatSelection'
 
 export default function SeatMapSection({ orderId }: { orderId: string }) {
   const {
-    /* data */
     order,
     passengers,
     seatMap,
     seatMapLoading,
     takenSeatIds,
-
-    /* state */
     activePassenger,
     draft,
-
-    /* actions */
     setActivePassenger,
     toggleSeat,
     saveSeats
   } = useSeatSelection(orderId)
 
   if (!order) return <Skeleton height={200} mt="md" />
+
+  if (!seatMapLoading && seatMap.length === 0)
+    return (
+      <Text ta="center" c="dimmed" py="lg">
+        Sorry, the seat map could not be loaded.
+      </Text>
+    )
 
   return (
     <Stack mt="md">

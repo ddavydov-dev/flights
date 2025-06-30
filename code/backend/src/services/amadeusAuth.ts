@@ -1,8 +1,6 @@
-import { fail } from '../utils/http'
-
 const TOKEN_URL = 'https://test.api.amadeus.com/v1/security/oauth2/token'
-const clientId = process.env.AMADEUS_API_KEY ?? ''
-const clientSecret = process.env.AMADEUS_API_SECRET ?? ''
+const clientId = process.env.AMADEUS_CLIENT_ID ?? ''
+const clientSecret = process.env.AMADEUS_CLIENT_SECRET ?? ''
 
 let accessToken = ''
 let expiresAt = 0

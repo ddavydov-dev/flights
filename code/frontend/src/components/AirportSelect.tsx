@@ -1,8 +1,8 @@
 'use client'
 
+import { useAirportSelect } from '@/shared/hooks'
 import { Group, Select, SelectProps, Text } from '@mantine/core'
 import { useCallback, useRef } from 'react'
-import { useAirportSelect } from '@/hooks/useAirportSelect'
 
 interface AirportSelectProps {
   initialIata: string

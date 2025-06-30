@@ -7,7 +7,7 @@ import type {
   LocationDTO
 } from '../types'
 
-export function toTitleCase(input: string): string {
+function toTitleCase(input: string): string {
   const namePart = input.replace(/\s*\(.*\)\s*$/, '')
 
   return namePart.toLowerCase().replace(/(^|[-\u2012-\u2015\s])\w/gu, m => m.toUpperCase())

@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import type { Request, Response, NextFunction } from 'express'
+import type { Request, Response } from 'express'
 import {
-  createPreOrder,
-  getPreOrder,
+  createOrder,
+  getOrder,
   markOrderConfirmed,
-  updatePreOrderSeats
+  updateOrderSeats
 } from '../services/orderStore.js'
 import { amadeusPost } from '../services/amadeusAuth.js'
 import { fail, ok } from '../utils/http.js'
@@ -13,25 +13,24 @@ import { toFlightOfferDTO } from '../utils/dto.js'
 
 const router = Router()
 
-router.post('/orders', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { flightOffer, passengers } = req.body as {
-      flightOffer?: AmadeusFlightOffer
-      passengers?: string
-    }
-    if (!flightOffer || !passengers) {
-      return fail(res, 400, 'flightOffer and passengers are required')
-    }
-    const order = createPreOrder(toFlightOfferDTO(flightOffer), Number(passengers))
-    res.status(201).json({ id: order.id })
-  } catch (err) {
-    next(err)
+router.post('/orders', async (req: Request, res: Response) => {
+  const { flightOffer, passengers } = req.body as {
+    flightOffer?: AmadeusFlightOffer
+    passengers?: string
   }
+  if (!flightOffer || !passengers) {
+    return fail(res, 400, 'flightOffer and passengers are required')
+  }
+  const order = createOrder(toFlightOfferDTO(flightOffer), Number(passengers))
+  res.status(201).json({ id: order.id })
 })
 
 router.get('/orders/:id', (req: Request, res: Response) => {
-  const order = getPreOrder(req.params.id)
-  return order ? res.json(order) : res.status(404).json({ error: 'Not found' })
+  const order = getOrder(req.params.id)
+
+  if (!order) return fail(res, 404, 'NOT FOUND')
+
+  return ok(res, order)
 })
 
 router.patch('/orders/:id', async (req: Request, res: Response) => {
@@ -42,15 +41,32 @@ router.patch('/orders/:id', async (req: Request, res: Response) => {
       return fail(res, 400, 'VALIDATION_ERROR', 'assignments must be a non-empty array')
     }
 
-    const updated = updatePreOrderSeats(req.params.id, assignments)
-    return updated ? ok(res, updated) : fail(res, 404, 'Not found')
-  } catch (e: any) {
-    return fail(res, 400, 'ASSIGNMENT_ERROR', e.message)
+    const updated = updateOrderSeats(req.params.id, assignments)
+
+    if (!updated) return fail(res, 404, 'NOT FOUND')
+
+    return ok(res, updated)
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return fail(res, 400, 'ASSIGNMENT_ERROR', e.message)
+    }
+    console.error(e)
+    return fail(res, 500, 'INTERNAL_ERROR')
   }
 })
 
+router.get('/orders/:id/seatmap', async (req: Request, res: Response) => {
+  const order = getOrder(req.params.id)
+  if (!order) return fail(res, 404, 'Not found')
+
+  const payload = { data: [order.offer.raw] }
+  const seatMap = await amadeusPost('/v1/shopping/seatmaps', payload)
+
+  return ok(res, seatMap)
+})
+
 router.post('/orders/:id/confirm', async (req, res) => {
-  const order = getPreOrder(req.params.id)
+  const order = getOrder(req.params.id)
   if (!order) return fail(res, 404, 'Not found')
 
   if (order.passengers.some(p => !p.seat)) {
@@ -104,8 +120,11 @@ router.post('/orders/:id/confirm', async (req, res) => {
 })
 
 router.get('/orders/:id/confirmation', (req, res) => {
-  const order = getPreOrder(req.params.id)
-  return order?.confirmation ? ok(res, order.confirmation) : fail(res, 404, 'Not confirmed')
+  const order = getOrder(req.params.id)
+
+  if (!order?.confirmation) return fail(res, 404, 'NOT_CONFIRMED')
+
+  return ok(res, order.confirmation)
 })
 
 export default router

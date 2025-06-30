@@ -34,7 +34,7 @@ function randomPassenger(id: number): Passenger {
   }
 }
 
-export function createPreOrder(offer: FlightOfferDTO, passengersAmount: number): Order {
+export function createOrder(offer: FlightOfferDTO, passengersAmount: number): Order {
   const id = randomUUID()
   const passengers = Array.from({ length: passengersAmount }, (_, i) => randomPassenger(i + 1))
 
@@ -43,11 +43,11 @@ export function createPreOrder(offer: FlightOfferDTO, passengersAmount: number):
   return order
 }
 
-export function getPreOrder(id: string): Order | null {
+export function getOrder(id: string): Order | null {
   return orders.get(id) ?? null
 }
 
-export function updatePreOrderSeats(id: string, assignments: SeatAssignmentDTO[]): Order | null {
+export function updateOrderSeats(id: string, assignments: SeatAssignmentDTO[]): Order | null {
   const order = orders.get(id)
   if (!order) return null
 

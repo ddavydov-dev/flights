@@ -5,7 +5,7 @@ import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core'
-import QueryProvider from '@/providers/QueryProvider'
+import QueryProvider from '@/shared/providers/QueryProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

@@ -1,13 +1,15 @@
-'use client'
-
 import { NumberInput, Button, Group } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useRouter } from 'next/navigation'
 import AirportSelect from './AirportSelect'
-import { useFlightsSearchForm } from '@/hooks/useFlightsSearchForm'
 import { useState } from 'react'
+import { useFlightsSearchForm } from '@/features/flights/hooks'
 
-export default function FlightsSearchForm() {
+interface FlightsSearchFormProps {
+  syncToUrl?: boolean
+}
+
+export default function FlightsSearchForm({ syncToUrl }: FlightsSearchFormProps) {
   const {
     origin,
     destination,
@@ -19,7 +21,7 @@ export default function FlightsSearchForm() {
     setDepartureDate,
     setReturnDate,
     setPassengers
-  } = useFlightsSearchForm()
+  } = useFlightsSearchForm(syncToUrl)
 
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)

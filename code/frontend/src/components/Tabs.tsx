@@ -60,13 +60,6 @@ export default function Tabs() {
         default:
           nextParams = params
       }
-      // if (view === 'flights') {
-      //   nextParams = hotelToFlight(params)
-      // } else if (view === 'hotels') {
-      //   nextParams = flightToHotel(params)
-      // } else {
-      //   nextParams = params
-      // }
 
       router.push(`/${view}?${nextParams.toString()}`)
     },

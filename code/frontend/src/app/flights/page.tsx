@@ -3,9 +3,9 @@
 import { Container, Divider } from '@mantine/core'
 import FlightsSearchForm from '@/components/FlightsSearchForm'
 import Tabs from '@/components/Tabs'
-import FlightList from '@/components/FlightList'
+import FlightList from '@/app/flights/FlightList'
 import { Suspense } from 'react'
-import FlightSort from '@/components/FlightSort'
+import FlightSort from '@/app/flights/FlightSort'
 
 export default function FlightsPage() {
   return (
@@ -13,7 +13,7 @@ export default function FlightsPage() {
       <Suspense>
         <Tabs />
 
-        <FlightsSearchForm />
+        <FlightsSearchForm syncToUrl />
 
         <Divider my={40} />
 

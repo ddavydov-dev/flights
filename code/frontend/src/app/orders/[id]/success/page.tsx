@@ -1,4 +1,4 @@
-import OrderSuccess from '@/components/OrderSuccess'
+import OrderSuccess from '@/app/orders/[id]/success/OrderSuccess'
 
 export default async function SuccessPage(ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params
