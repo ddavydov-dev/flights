@@ -98,7 +98,7 @@ router.post('/search/hotels', async (req: Request, res: Response) => {
     return fail(res, errors[0].status, errors[0].title, errors[0].detail)
   }
 
-  return ok(res, data.map(toHotelOfferDTO))
+  return ok(res, data.flatMap(toHotelOfferDTO))
 })
 
 export default router

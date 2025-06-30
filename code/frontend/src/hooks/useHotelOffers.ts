@@ -8,7 +8,6 @@ export function useHotelOffers() {
   return useQuery({
     queryKey: ['hotelOffers', city, checkIn, checkOut, adults],
     queryFn: () => fetchHotelOffers({ city, checkInDate: checkIn, checkOutDate: checkOut, adults }),
-
     enabled: !!city,
     staleTime: 0,
     retry: 1
