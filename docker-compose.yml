@@ -32,7 +32,7 @@ services:
       - backend
 
 networks:
-  app-net:
+  flights_app-net:
     driver: bridge
 
 volumes:
