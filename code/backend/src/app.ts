@@ -1,5 +1,5 @@
 import express from 'express'
-import type { Request, Response } from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import routes from './routes/index.js'
 
@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api', routes)
 
-app.use((err: unknown, _: Request, res: Response) => {
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err)
   res.status(500).json({ error: 'Internal server error' })
 })
