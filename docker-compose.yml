@@ -4,10 +4,10 @@ services:
     container_name: backend
     restart: unless-stopped
     networks: [app-net]
-    env_file:
-      - ./code/backend/.env
     environment:
       - NODE_ENV=production
+      - AMADEUS_API_KEY
+      - AMADEUS_API_SECRET
     expose:
       - '4000'
 
@@ -16,8 +16,6 @@ services:
     container_name: frontend
     restart: unless-stopped
     networks: [app-net]
-    env_file:
-      - ./code/frontend/.env
     expose:
       - '3000'
 
