@@ -26,7 +26,7 @@ AMADEUS_CLIENT_SECRET=your_secret
 PORT=400
 
 ./code/frontend/.env
-NEXT_PUBLIC_BACKEND_URL=
+NEXT_PUBLIC_BACKEND_URL=http://localhost/api
 
 #### 2. Update docker-compose.yml
 
